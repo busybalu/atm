@@ -42,7 +42,7 @@ public class RestATMControllerTests {
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 	/**
-	 * This method is to test the greet user service shows the appropriate greet message to the ATM User.
+	 * This test method is to test the greet user service shows the appropriate greet message to the ATM User.
 	 * @throws Exception throws Exception
 	 */
 	@Test
@@ -67,7 +67,7 @@ public class RestATMControllerTests {
 		then(entity.getBody().getMessage()).isEqualTo(String.format(SuccessMessages.WELCOME_TEMPLATE.getDescription(), expectedUserAcctName));
 	}
 	/**
-	 * This method is used to test greetuser service respond with Invalid Account Number message
+	 * This test method is used to test greetuser service respond with Invalid Account Number message
 	 * while using Invalid Account Number.
 	 * @throws Exception throws Exception
 	 */
@@ -482,6 +482,51 @@ public class RestATMControllerTests {
 	public void testLoadMoneyToATMUsingInValidCredential() {
 		String invalidAdminUser = "admin24234";
 		String invalidAdminPassword = "P@43245452";
+		Map<Integer, Integer> notesToLoad = new HashMap<>();
+		notesToLoad.put(50, 2);
+		notesToLoad.put(20, 2);
+		notesToLoad.put(10, 1);
+		notesToLoad.put(5, 2);
+		ResponseEntity<ErrorDetails> entity = this.testRestTemplate.postForEntity(
+				"http://localhost:" + this.port + "/atm/loadmoney/" + invalidAdminUser + "/" + invalidAdminPassword,
+				notesToLoad, ErrorDetails.class);
+
+		then(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+	@Test
+	public void testLoadMoneyToATMUsingEmptyCredentials() {
+		String invalidAdminUser = "";
+		String invalidAdminPassword = "";
+		Map<Integer, Integer> notesToLoad = new HashMap<>();
+		notesToLoad.put(50, 2);
+		notesToLoad.put(20, 2);
+		notesToLoad.put(10, 1);
+		notesToLoad.put(5, 2);
+		ResponseEntity<ErrorDetails> entity = this.testRestTemplate.postForEntity(
+				"http://localhost:" + this.port + "/atm/loadmoney/" + invalidAdminUser + "/" + invalidAdminPassword,
+				notesToLoad, ErrorDetails.class);
+
+		then(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+	@Test
+	public void testLoadMoneyToATMUsingEmptyPassword() {
+		String invalidAdminUser = "admin";
+		String invalidAdminPassword = "";
+		Map<Integer, Integer> notesToLoad = new HashMap<>();
+		notesToLoad.put(50, 2);
+		notesToLoad.put(20, 2);
+		notesToLoad.put(10, 1);
+		notesToLoad.put(5, 2);
+		ResponseEntity<ErrorDetails> entity = this.testRestTemplate.postForEntity(
+				"http://localhost:" + this.port + "/atm/loadmoney/" + invalidAdminUser + "/" + invalidAdminPassword,
+				notesToLoad, ErrorDetails.class);
+
+		then(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+	@Test
+	public void testLoadMoneyToATMUsingEmptyUser() {
+		String invalidAdminUser = "";
+		String invalidAdminPassword = "P@55w0rd";
 		Map<Integer, Integer> notesToLoad = new HashMap<>();
 		notesToLoad.put(50, 2);
 		notesToLoad.put(20, 2);
