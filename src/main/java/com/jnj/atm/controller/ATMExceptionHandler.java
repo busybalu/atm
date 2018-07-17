@@ -35,7 +35,7 @@ public class ATMExceptionHandler extends ResponseEntityExceptionHandler {
 	 *            AccountNotFoundException
 	 * @param request
 	 *            WebRequest
-	 * @return ResponseEntity<ErrorDetails>
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(AccountNotFoundException.class)
 	public final ResponseEntity<ErrorDetails> handleAccountNotFoundException(AccountNotFoundException ex,
@@ -54,7 +54,7 @@ public class ATMExceptionHandler extends ResponseEntityExceptionHandler {
 	 *            InsufficientFundsException
 	 * @param request
 	 *            WebRequest
-	 * @return ResponseEntity<ErrorDetails>
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(InsufficientFundsException.class)
 	public final ResponseEntity<ErrorDetails> handleInsufficientFundsException(InsufficientFundsException ex,
@@ -73,7 +73,7 @@ public class ATMExceptionHandler extends ResponseEntityExceptionHandler {
 	 *            InvalidAmountException
 	 * @param request
 	 *            WebRequest
-	 * @return ResponseEntity<ErrorDetails>
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(InvalidAmountException.class)
 	public final ResponseEntity<ErrorDetails> handleInvalidAmountException(InvalidAmountException ex,
@@ -92,7 +92,7 @@ public class ATMExceptionHandler extends ResponseEntityExceptionHandler {
 	 *            ATMOutOfExpectedCashException
 	 * @param request
 	 *            WebRequest
-	 * @return ResponseEntity<ErrorDetails>
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ATMOutOfExpectedCashException.class)
 	public final ResponseEntity<ErrorDetails> handleATMOutOfExpectedCashException(ATMOutOfExpectedCashException ex,
@@ -111,7 +111,7 @@ public class ATMExceptionHandler extends ResponseEntityExceptionHandler {
 	 *            ATMOutOfCashException
 	 * @param request
 	 *            WebRequest
-	 * @return ResponseEntity<ErrorDetails>
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ATMOutOfCashException.class)
 	public final ResponseEntity<ErrorDetails> handleATMOutOfCashException(ATMOutOfCashException ex,
@@ -128,7 +128,7 @@ public class ATMExceptionHandler extends ResponseEntityExceptionHandler {
 	 *            InvalidAccountException
 	 * @param request
 	 *            WebRequest
-	 * @return ResponseEntity<ErrorDetails>
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(InvalidAccountException.class)
 	public final ResponseEntity<ErrorDetails> handleInvalidAccountException(InvalidAccountException ex,

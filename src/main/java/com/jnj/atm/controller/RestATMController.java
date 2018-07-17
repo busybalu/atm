@@ -266,10 +266,10 @@ public class RestATMController {
 	 * Sample Output: {"note50Counter": 26,"note20Counter": 39,"note10Counter":
 	 * 49,"note5Counter": 39,"totalAmountInATM": 2765}
 	 * 
-	 * @param userid
-	 * @param password
-	 * @param notesToLoad
-	 * @return
+	 * @param userid User ID of the Admin User
+	 * @param password Password of the Admin User
+	 * @param notesToLoad Notes to Load into ATM
+	 * @return ATMNotesDispenser
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/atm/loadmoney/{userid}/{password}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ATMNotesDispenser loadMoneyToATM(@PathVariable(value = "userid") String userid,

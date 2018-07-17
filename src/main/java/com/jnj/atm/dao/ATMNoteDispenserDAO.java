@@ -50,7 +50,7 @@ public class ATMNoteDispenserDAO {
 	 * This method is to Update the ATM Currency Note Counter after withdrawal of
 	 * money.
 	 * 
-	 * @param dispensedNoteCount
+	 * @param dispensedNoteCount Counts of Dispensed Notes
 	 * @return ATMNotesDispenser
 	 */
 	public synchronized ATMNotesDispenser updateATMNoteDispenser(Map<Integer, Integer> dispensedNoteCount) {

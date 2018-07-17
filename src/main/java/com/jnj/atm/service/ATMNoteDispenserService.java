@@ -31,7 +31,7 @@ public class ATMNoteDispenserService {
 	 * 
 	 * @param withdrawAmount
 	 *            Withdraw Amount
-	 * @return Map<Integer, Integer>
+	 * @return Map
 	 */
 	public Map<Integer, Integer> getNotesDenominationToDispense(BigDecimal withdrawAmount) {
 
@@ -68,8 +68,8 @@ public class ATMNoteDispenserService {
 	 * by the ATM. Returns false if the requested withdraw amount is unable to
 	 * dispense by the ATM.
 	 * 
-	 * @param withdrawAmount
-	 * @return
+	 * @param withdrawAmount Withdraw Amount
+	 * @return true or false
 	 */
 	public boolean isValidAmountToDispense(BigDecimal withdrawAmount) {
 		boolean isValidAmount = false;
