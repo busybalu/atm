@@ -17,10 +17,18 @@ import com.jnj.atm.model.ATMUserAccount;
 @Repository
 public class ATMUserAccountDAO {
 	private static final Map<BigInteger, ATMUserAccount> acctMap = new HashMap();
+	/**
+	 * This Static Block is to initialize ATM User Account loaded with some initial
+	 * Balance.
+	 */
 	static {
 		initATMUserAccounts();
 	}
 
+	/**
+	 * This Static method is to initialize ATM User Account loaded with some initial
+	 * Balance.
+	 */
 	private static void initATMUserAccounts() {
 
 		ATMUserAccount acct1 = new ATMUserAccount();
@@ -79,10 +87,27 @@ public class ATMUserAccountDAO {
 		acctMap.put(acct6.getAcctNo(), acct6);
 	}
 
+	/**
+	 * This method return the account for the given account number.
+	 * 
+	 * @param acctNo
+	 *            Account Number
+	 * @return ATMUserAccount
+	 */
 	public ATMUserAccount getATMUserAccount(BigInteger acctNo) {
 		return acctMap.get(acctNo);
 	}
 
+	/**
+	 * This method update the Opening Balance and Overdraft Balance of the ATM user
+	 * account.
+	 * 
+	 * @param acct
+	 *            ATMUserAccount
+	 * @param withdrawAmt
+	 *            Withdraw Amount
+	 * @return ATMUserAccount
+	 */
 	public synchronized ATMUserAccount updateATMUserAccount(ATMUserAccount acct, String withdrawAmt) {
 		ATMUserAccount accountToUpdate = acct;
 		BigDecimal withdrawAmount = new BigDecimal(withdrawAmt);
@@ -99,6 +124,16 @@ public class ATMUserAccountDAO {
 		return acctMap.get(acct.getAcctNo());
 	}
 
+	/**
+	 * This method returns the updated Account Details after addition of the
+	 * Deposited Amount.
+	 * 
+	 * @param acct
+	 *            ATMUserAccount
+	 * @param depositAmt
+	 *            Deposit Amount
+	 * @return ATMUserAccount
+	 */
 	public synchronized ATMUserAccount deposityMoneyToATMUserAccount(ATMUserAccount acct, BigDecimal depositAmt) {
 		BigDecimal newOpeningBalance = acct.getOpeningBal().add(depositAmt);
 		acct.setOpeningBal(newOpeningBalance);

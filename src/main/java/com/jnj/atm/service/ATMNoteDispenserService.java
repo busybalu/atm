@@ -25,6 +25,14 @@ public class ATMNoteDispenserService {
 	@Autowired
 	private ATMNoteDispenserDAO atmNoteDispenserDAO;
 
+	/**
+	 * This service method is to calculates the minimum number of notes for the
+	 * given withdrawal Amount
+	 * 
+	 * @param withdrawAmount
+	 *            Withdraw Amount
+	 * @return Map<Integer, Integer>
+	 */
 	public Map<Integer, Integer> getNotesDenominationToDispense(BigDecimal withdrawAmount) {
 
 		Map<Integer, Integer> currentNoteCountMap = new LinkedHashMap<>();
@@ -55,6 +63,14 @@ public class ATMNoteDispenserService {
 		return dispenseNoteCountMap;
 	}
 
+	/**
+	 * This method return true if the requested withdraw Amount is able to dispense
+	 * by the ATM. Returns false if the requested withdraw amount is unable to
+	 * dispense by the ATM.
+	 * 
+	 * @param withdrawAmount
+	 * @return
+	 */
 	public boolean isValidAmountToDispense(BigDecimal withdrawAmount) {
 		boolean isValidAmount = false;
 		Map<Integer, Integer> denominationToDispense = getNotesDenominationToDispense(withdrawAmount);
@@ -69,15 +85,35 @@ public class ATMNoteDispenserService {
 		return isValidAmount;
 	}
 
+	/**
+	 * This method gets the Count of available Notes in the ATM machine along with
+	 * the Total Amount.
+	 * 
+	 * @return ATMNotesDispenser
+	 */
 	public ATMNotesDispenser getATMNoteDispenser() {
 		return atmNoteDispenserDAO.getATMNoteDispenser();
 	}
 
+	/**
+	 * This method is to update the ATM after every withdrawal of money.
+	 * 
+	 * @param withdrawAmount
+	 *            Withdraw Amount
+	 * @return ATMNotesDispenser
+	 */
 	public ATMNotesDispenser updateATMNoteDispenser(BigDecimal withdrawAmount) {
 		Map<Integer, Integer> denominationToDispense = getNotesDenominationToDispense(withdrawAmount);
 		return atmNoteDispenserDAO.updateATMNoteDispenser(denominationToDispense);
 	}
 
+	/**
+	 * This method is to load given money into the ATM.
+	 * 
+	 * @param notesToLoad
+	 *            Counts of each denomination
+	 * @return ATMNotesDispenser
+	 */
 	public ATMNotesDispenser loadATMMoney(Map<Integer, Integer> notesToLoad) {
 		return atmNoteDispenserDAO.loadATMMoney(notesToLoad);
 	}

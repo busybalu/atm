@@ -65,12 +65,14 @@ public class RestATMController {
 	public GreetUser greetUserWithName(@PathVariable(value = "acctNum") String acctNum) {
 		ATMUserAccount usrAcct = atmUserAcctService.getATMUserAccountByAcctNum(acctNum);
 		if (null != usrAcct) {
-			//Comes here when User Account Exists in our Records.
+			// Comes here when User Account Exists in our Records.
 			GreetUser greetUsr = new GreetUser();
 			greetUsr.setMessage(
 					String.format(SuccessMessages.WELCOME_TEMPLATE.getDescription(), usrAcct.getAcctName()));
 			return greetUsr;
 		} else {
+			// Throw InvalidAccountException when User Account does not exists in our
+			// records.
 			throw new InvalidAccountException();
 		}
 	}
@@ -144,23 +146,31 @@ public class RestATMController {
 		BigDecimal withdrawAmount = new BigDecimal(withdrawAmt);
 		ATMUserAccount usrAcct = atmUserAcctService.getATMUserAccountByAcctNum(acctNum);
 
-		// Throw AccountNotFoundException if the account does not exists and/or user is
-		// not an authentic user.
 		if (usrAcct == null || !atmUserAcctService.isAuthenticUser(usrAcct, pin)) {
+			// Throw AccountNotFoundException if the account does not exists and/or user is
+			// not an authentic user.
 			throw new AccountNotFoundException();
 		} else if (withdrawAmount.signum() == -1 || withdrawAmount.signum() == 0) {
+			// Throw InvalidAmountException when the amount requested to withdraw is
+			// negative amount or Zero Amount
 			throw new InvalidAmountException();
 		} else if (atmNoteDispenserService.getATMNoteDispenser().getTotalAmountInATM().signum() == 0) {
+			// Throw ATMOutOfCashException when the ATM is out of Cash.
 			throw new ATMOutOfCashException();
 		} else if (!atmUserAcctService.hasSufficientFunds(usrAcct, withdrawAmt)) {
-			// Comes here if user Account has InSufficient Funds.
+			// Throw InsufficientFundsException when the user Account has InSufficient
+			// Funds.
 			throw new InsufficientFundsException();
 		} else if (withdrawAmount.compareTo(atmNoteDispenserService.getATMNoteDispenser().getTotalAmountInATM()) > 0) {
+			// Throw ATMOutOfExpectedCashException when the ATM is out of requested withdraw
+			// Amount.
 			throw new ATMOutOfExpectedCashException();
 		} else if (!atmNoteDispenserService.isValidAmountToDispense(withdrawAmount)) {
 			throw new InvalidAmountException();
 		} else {
 			// Comes here if user Account has Sufficient Funds.
+
+			// Update the Opening Balance and/or Overdraft Balance of the ATM user account.
 			ATMUserAccount updatedAcct = atmUserAcctService.updateATMUserAccount(acctNum, withdrawAmt);
 			currentAccountBalanceTxn = new CurrentAccountBalance();
 			currentAccountBalanceTxn.setTxnID(UUID.randomUUID().toString());
@@ -200,12 +210,15 @@ public class RestATMController {
 		BigDecimal depositAmount = new BigDecimal(depositAmt);
 		ATMUserAccount usrAcct = atmUserAcctService.getATMUserAccountByAcctNum(acctNum);
 		SuccessDetails succesDetail = null;
-		// Throw AccountNotFoundException if the account does not exists.
 		if (usrAcct == null) {
+			// Throw InvalidAccountException if the account does not exists.
 			throw new InvalidAccountException();
 		} else if (depositAmount.signum() == -1 || depositAmount.signum() == 0) {
+			// Throw InvalidAccountException if the depositAmount is negative or Zero
+			// amount.
 			throw new InvalidAmountException();
 		} else {
+			// Add Balance of the ATM user Account with the Deposit Amount.
 			ATMUserAccount updatedUsrAcct = atmUserAcctService.deposityMoneyToATMUserAccount(acctNum, depositAmount);
 			succesDetail = new SuccessDetails();
 			succesDetail.setTxnID(UUID.randomUUID().toString());
@@ -218,6 +231,11 @@ public class RestATMController {
 	}
 
 	/**
+	 * This method serves as a RESTFULL Webservice endpoint to check the available
+	 * notes in the ATM.
+	 * 
+	 * Sample Output: { "note50Counter": 20, "note20Counter": 30, "note10Counter":
+	 * 30, "note5Counter": 20, "totalAmountInATM": 2000 }
 	 * 
 	 * @param userid
 	 *            Admin User ID
@@ -225,7 +243,7 @@ public class RestATMController {
 	 *            Admin User Password
 	 * @return ATMNotesDispenser
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/atm/healthCheck/{userid}/{password}")
+	@RequestMapping(method = RequestMethod.GET, value = "/atm/healthcheck/{userid}/{password}")
 	public ATMNotesDispenser checkATMHealth(@PathVariable(value = "userid") String userid,
 			@PathVariable(value = "password") String password) {
 
@@ -234,10 +252,25 @@ public class RestATMController {
 		if (!atmUserAcctService.isAuthenticAdminUser(userid, password)) {
 			throw new AccountNotFoundException();
 		} else {
+			// return available Note denominations and total amount in ATM.
 			return atmNoteDispenserService.getATMNoteDispenser();
 		}
 	}
 
+	/**
+	 * This method serves as a RESTFULL webservice endpoint to load currency notes
+	 * to the ATM.
+	 * 
+	 * Sample Input: {"50":10,"20":10,"10":20,"5":20}
+	 * 
+	 * Sample Output: {"note50Counter": 26,"note20Counter": 39,"note10Counter":
+	 * 49,"note5Counter": 39,"totalAmountInATM": 2765}
+	 * 
+	 * @param userid
+	 * @param password
+	 * @param notesToLoad
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/atm/loadmoney/{userid}/{password}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ATMNotesDispenser loadMoneyToATM(@PathVariable(value = "userid") String userid,
 			@PathVariable(value = "password") String password, @RequestBody Map<Integer, Integer> notesToLoad) {
@@ -247,6 +280,8 @@ public class RestATMController {
 		if (!atmUserAcctService.isAuthenticAdminUser(userid, password)) {
 			throw new AccountNotFoundException();
 		} else {
+			// return available Note denominations and total amount in ATM including the
+			// notes loaded to the ATM.
 			return atmNoteDispenserService.loadATMMoney(notesToLoad);
 		}
 	}

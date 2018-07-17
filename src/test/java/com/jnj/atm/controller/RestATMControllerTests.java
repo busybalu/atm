@@ -173,7 +173,7 @@ public class RestATMControllerTests {
 		String validAdminPassword = "P@55w0rd";
 
 		ResponseEntity<ATMNotesDispenser> atmHealthCheckResEntity = this.testRestTemplate.getForEntity(
-				"http://localhost:" + this.port + "/atm/healthCheck/" + validAdminUser + "/" + validAdminPassword,
+				"http://localhost:" + this.port + "/atm/healthcheck/" + validAdminUser + "/" + validAdminPassword,
 				ATMNotesDispenser.class);
 		then(atmHealthCheckResEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 		BigDecimal totalAmountInATM = atmHealthCheckResEntity.getBody().getTotalAmountInATM();
@@ -309,7 +309,7 @@ public class RestATMControllerTests {
 		String validAdminPassword = "P@55w0rd";
 
 		ResponseEntity<ATMNotesDispenser> atmHealthResEntity = this.testRestTemplate.getForEntity(
-				"http://localhost:" + this.port + "/atm/healthCheck/" + validAdminUser + "/" + validAdminPassword,
+				"http://localhost:" + this.port + "/atm/healthcheck/" + validAdminUser + "/" + validAdminPassword,
 				ATMNotesDispenser.class);
 
 		BigDecimal totalMoneyInATM = atmHealthResEntity.getBody().getTotalAmountInATM();
@@ -405,7 +405,7 @@ public class RestATMControllerTests {
 		String validAdminUser = "admin";
 		String validAdminPassword = "P@55w0rd";
 		ResponseEntity<ATMNotesDispenser> entity = this.testRestTemplate.getForEntity(
-				"http://localhost:" + this.port + "/atm/healthCheck/" + validAdminUser + "/" + validAdminPassword,
+				"http://localhost:" + this.port + "/atm/healthcheck/" + validAdminUser + "/" + validAdminPassword,
 				ATMNotesDispenser.class);
 
 		then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -417,7 +417,7 @@ public class RestATMControllerTests {
 		String inValidAdminUser = "admin233";
 		String inValidAdminPassword = "P@44";
 		ResponseEntity<ErrorDetails> entity = this.testRestTemplate.getForEntity(
-				"http://localhost:" + this.port + "/atm/healthCheck/" + inValidAdminUser + "/" + inValidAdminPassword,
+				"http://localhost:" + this.port + "/atm/healthcheck/" + inValidAdminUser + "/" + inValidAdminPassword,
 				ErrorDetails.class);
 
 		then(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -430,7 +430,7 @@ public class RestATMControllerTests {
 		String inValidAdminUser = "";
 		String inValidAdminPassword = "";
 		ResponseEntity<ErrorDetails> entity = this.testRestTemplate.getForEntity(
-				"http://localhost:" + this.port + "/atm/healthCheck/" + inValidAdminUser + "/" + inValidAdminPassword,
+				"http://localhost:" + this.port + "/atm/healthcheck/" + inValidAdminUser + "/" + inValidAdminPassword,
 				ErrorDetails.class);
 
 		then(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
